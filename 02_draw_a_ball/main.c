@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 
     glutInit(&argc, argv);
     glutInitWindowSize(640, 480);
-    glutCreateWindow("Draw a Ball");
+    glutCreateWindow("OpenGL Brickout");
     glutDisplayFunc(display);
 
     init();
