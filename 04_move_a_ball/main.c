@@ -4,9 +4,13 @@
 #define WIDTH  640
 #define HEIGHT 480
 
-GLfloat ballX = 100.0f;
-GLfloat ballY = 100.0f;
-GLfloat ballRadius = 14.0f;
+struct {
+	GLfloat x;
+	GLfloat y;
+	GLfloat radius;
+	GLfloat dy;
+	GLfloat dx;
+} ball;
 
 void init();
 void display();
@@ -32,6 +36,12 @@ void init() {
 	glLoadIdentity();
 	gluOrtho2D(0, WIDTH, 0, HEIGHT);
 
+	ball.x = 320.0f;
+	ball.y = 240.0f;
+	ball.radius = 14.0f;
+	ball.dx = 3.0f;
+	ball.dy = -3.0f;
+
 }
 
 void display() {
@@ -41,7 +51,7 @@ void display() {
 	glLoadIdentity();
 	glPushMatrix();
 
-	glTranslatef(ballX, ballY, 0.0f);
+	glTranslatef(ball.x, ball.y, 0.0f);
 	glBegin(GL_TRIANGLE_FAN);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glVertex2f(0.0f, 0.0f);
@@ -51,15 +61,31 @@ void display() {
 
 	for(i = 0; i <= 100; i++) {
 		angle = i * 2.0f * M_PI / 100;
-		glVertex2f(cos(angle) * ballRadius, sin(angle) * ballRadius);
+		glVertex2f(cos(angle) * ball.radius, sin(angle) * ball.radius);
 	}
 	
 	glEnd();
 	glPopMatrix();
 	glutSwapBuffers();
 
-	ballX += 2.0f;
-	ballY += 2.0f;
+	ball.x += ball.dx;
+	ball.y += ball.dy;
+
+	if(ball.x < ball.radius) {
+		ball.x = ball.radius;
+		ball.dx = -ball.dx;
+	} else if(ball.x > WIDTH - ball.radius) {
+		ball.x = WIDTH - ball.radius;
+		ball.dx = -ball.dx;
+	}
+
+	if(ball.y < ball.radius) {
+		ball.y = ball.radius;
+		ball.dy = -ball.dy;
+	} else if(ball.y > HEIGHT - ball.radius) {
+		ball.y = HEIGHT - ball.radius;
+		ball.dy = -ball.dy;
+	}
 
 }
 
